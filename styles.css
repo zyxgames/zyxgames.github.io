@@ -1,0 +1,51 @@
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
+}
+
+#game-board {
+    background-color: #cbd5e0;
+    border: 2px solid #4a5568;
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #e2e8f0;
+    transition: all 0.2s;
+}
+
+.cell:hover {
+    background-color: #cbd5e0;
+}
+
+.cell.revealed {
+    background-color: #ffffff;
+}
+
+.cell.flagged {
+    background-color: #feb2b2;
+}
+
+.cell.mine {
+    background-color: #f56565;
+}
+
+.cell.mine.revealed {
+    background-color: #e53e3e;
+}
+
+.cell-1 { color: #3182ce; }
+.cell-2 { color: #38a169; }
+.cell-3 { color: #dd6b20; }
+.cell-4 { color: #805ad5; }
+.cell-5 { color: #d53f8c; }
+.cell-6 { color: #00b5d8; }
+.cell-7 { color: #000000; }
+.cell-8 { color: #718096; }
