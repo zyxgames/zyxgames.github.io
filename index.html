@@ -6,7 +6,7 @@
   <title>游戏乐园 - 发现你的下一个最爱游戏</title>
   <!-- 引入外部资源 -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- 配置Tailwind -->
   <script>
@@ -27,6 +27,9 @@
       }
     }
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4402948071877561"
+    crossorigin="anonymous"></script>
+  <meta name="google-adsense-account" content="ca-pub-4402948071877561">
   
   <!-- 自定义工具类 -->
   <style type="text/tailwindcss">
@@ -136,15 +139,23 @@
       <div class="container mx-auto px-4">
         
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <!-- 分类项 -->
-          <a href="saolei/index.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
+          <!-- 扫雷 -->
+          <a href="#" onclick="openGame('saolei/index.html'); return false;" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
             <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
               <i class="fa fa-bomb text-primary text-xl"></i>
             </div>
             <span class="font-medium">Minesweeper</span>
           </a>
           
-          <a href="#" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
+          <!-- 贪吃蛇 -->
+          <a href="#" onclick="openGame('tanchishe/snake-game.html'); return false;" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
+            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+              <i class="fa-solid fa-snake text-primary text-xl"></i>
+            </div>
+            <span class="font-medium">Snake</span>
+          </a>
+          
+          <!-- <a href="#" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
             <div class="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center mb-3">
               <i class="fa fa-lightbulb-o text-secondary text-xl"></i>
             </div>
@@ -177,7 +188,7 @@
               <i class="fa fa-futbol-o text-red-500 text-xl"></i>
             </div>
             <span class="font-medium">体育</span>
-          </a>
+          </a> -->
         </div>
       </div>
     </section>
@@ -185,6 +196,20 @@
     
   
   </main>
+
+  <!-- 游戏弹窗 -->
+  <div id="gameModal" class="fixed inset-0 z-[9999] hidden bg-black bg-opacity-50">
+    <div class="w-full h-full flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg shadow-2xl w-full h-full max-w-7xl relative">
+        <!-- 关闭按钮 -->
+        <button onclick="closeGame()" class="absolute top-4 right-4 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors">
+          <i class="fa fa-times text-lg"></i>
+        </button>
+        <!-- 游戏iframe -->
+        <iframe id="gameFrame" src="" class="w-full h-full rounded-lg" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
 
   <!-- 简单页脚 -->
   <footer class="bg-white border-t py-6 mt-auto">
@@ -195,6 +220,39 @@
 
   <!-- JavaScript -->
   <script>
+    // 游戏弹窗控制
+    function openGame(gameUrl) {
+      const modal = document.getElementById('gameModal');
+      const gameFrame = document.getElementById('gameFrame');
+      
+      gameFrame.src = gameUrl;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // 防止背景滚动
+    }
+    
+    function closeGame() {
+      const modal = document.getElementById('gameModal');
+      const gameFrame = document.getElementById('gameFrame');
+      
+      modal.classList.add('hidden');
+      gameFrame.src = ''; // 清空iframe内容
+      document.body.style.overflow = 'auto'; // 恢复滚动
+    }
+    
+    // 点击背景关闭弹窗
+    document.getElementById('gameModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeGame();
+      }
+    });
+    
+    // ESC键关闭弹窗
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeGame();
+      }
+    });
+
     // 导航栏滚动效果
     window.addEventListener('scroll', function() {
       const navbar = document.getElementById('navbar');
