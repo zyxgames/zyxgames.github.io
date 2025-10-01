@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>连连看 — 单文件（修复 onTileClick）</title>
+  <style>
+    :root{ --bg:#0f1724; --card:#e6eef8; --accent:#06b6d4; --glass: rgba(255,255,255,0.06); }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{background:linear-gradient(180deg,#071024 0%, #081527 60%);color:#e6eef8;display:flex;align-items:center;justify-content:center;padding:18px}
+    .app{max-width:980px;width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:14px;padding:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .title{font-size:18px;font-weight:700}
+    .controls{display:flex;gap:8px;align-items:center}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--card);cursor:pointer;font-weight:600}
+    .btn.small{padding:6px 8px;font-size:13px}
+    .board-wrap{display:flex;gap:12px}
+    .sidebar{min-width:180px;padding:8px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));}
+    .board{flex:1;display:flex;align-items:center;justify-content:center;padding:8px}
+
+    .grid{width:100%;height:calc(min(78vh,720px));display:grid;gap:6px;touch-action:none;position:relative}
+    .cell{background:transparent;border-radius:10px;display:flex;align-items:center;justify-content:center;user-select:none;overflow:hidden;position:relative}
+    .tile{width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:20px;transform-origin:center;transition:transform .15s ease,opacity .18s ease;box-shadow:0 6px 16px rgba(2,6,23,0.6)}
+    .tile.cover{background:linear-gradient(180deg,#ffffff22,#00000022);backdrop-filter: blur(6px);}
+    .tile.hidden{opacity:0;transform:scale(.8);pointer-events:none}
+    .tile.selected{outline:3px solid rgba(6,182,212,0.9);transform:scale(1.04)}
+    .path-line{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+
+    .footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:13px}
+    .range{width:120px}
+
+    @media (max-width:720px){.app{padding:10px;border-radius:10px}.board-wrap{flex-direction:column}.sidebar{width:100%;display:flex;flex-direction:row;justify-content:space-between}.grid{height:64vh}}
+  </style>
+</head>
+<body>
+  <div class="app" role="application">
+    <div class="header">
+      <div class="title">连连看 — 单文件版（修复）</div>
+      <div class="controls">
+        <select id="difficulty" class="btn small" title="难度">
+          <option value="8x6">简单（8×6）</option>
+          <option value="10x8" selected>中等（10×8）</option>
+          <option value="12x10">困难（12×10）</option>
+        </select>
+        <button id="newBtn" class="btn small">新游戏</button>
+        <button id="hintBtn" class="btn small">提示</button>
+      </div>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board">
+        <div id="grid" class="grid" aria-label="连连看棋盘"></div>
+      </div>
+
+      <div class="sidebar">
+        <div style="padding:8px">
+          <div class="status"><div>步数：<span id="moves">0</span></div><div>匹配：<span id="matched">0</span></div></div>
+          <div style="height:10px"></div>
+          <div>计时：<strong id="timer">00:00</strong></div>
+          <div style="height:10px"></div>
+          <div>剩余对数：<strong id="remaining">0</strong></div>
+        </div>
+        <div style="padding:8px;display:flex;flex-direction:column;gap:8px">
+          <label style="font-size:13px">缩放棋盘<input id="scale" type="range" min="60" max="120" value="100" class="range"/></label>
+          <div style="font-size:12px;color:#bcd">点击或触摸选择两张相同的牌，通过不超过两次拐弯的连线即可消除它们。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>提示会消耗一步。可在移动端触摸选择。</div>
+      <div style="opacity:.8">Made with ❤️ — 单文件</div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    // --- 状态与元素 ---
+    const EMOJIS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐢','🐝','🦄'];
+    const gridEl = document.getElementById('grid');
+    const movesEl = document.getElementById('moves');
+    const matchedEl = document.getElementById('matched');
+    const remainingEl = document.getElementById('remaining');
+    const timerEl = document.getElementById('timer');
+    const difficultyEl = document.getElementById('difficulty');
+    const newBtn = document.getElementById('newBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const scaleEl = document.getElementById('scale');
+
+    let rows = 10, cols = 8;
+    let board = [];
+    let tilesMap = {}; // id -> {r,c,val,el}
+    let selected = null;
+    let moves = 0, matchedCount = 0, totalPairs = 0;
+    let timer = 0, timerId = null;
+
+    // --- 时钟辅助 ---
+    function resetTimer(){ clearInterval(timerId); timerId = null; timer = 0; timerEl.textContent = '00:00'; }
+    function startTimer(){ if(timerId) return; timerId = setInterval(()=>{ timer++; timerEl.textContent = formatTime(timer); },1000); }
+    function formatTime(s){ const m=Math.floor(s/60); const sec=s%60; return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'); }
+
+    function setDifficulty(val){ const [c,r] = val.split('x').map(n=>parseInt(n,10)); cols = c; rows = r; }
+
+    // --- 生成一个严格全局可解的棋盘 ---
+    function generateSolvableBoard(){
+      const R = rows+2, C = cols+2;
+      while(true){
+        board = Array.from({length:R}, ()=>Array(C).fill(0));
+        tilesMap = {};
+        const innerCount = rows*cols;
+        totalPairs = Math.floor(innerCount/2);
+        const symbols = [];
+        let pickIndex = 0;
+        for(let i=0;i<totalPairs;i++){
+          if(pickIndex>=EMOJIS.length) pickIndex = 0;
+          symbols.push(EMOJIS[pickIndex]); pickIndex++;
+        }
+        const tileVals = [...symbols, ...symbols];
+        shuffle(tileVals);
+        let idCounter = 1;
+        for(let r=1;r<=rows;r++){
+          for(let c=1;c<=cols;c++){
+            const val = tileVals[(r-1)*cols + (c-1)] || '';
+            if(val === ''){ board[r][c] = 0; continue; }
+            board[r][c] = idCounter;
+            tilesMap[idCounter] = { r, c, val };
+            idCounter++;
+          }
+        }
+        // 验证全局可解性
+        if(isGloballySolvable()) return;
+        // 否则循环重试（注意：此处可能会多次尝试，生成大盘面时较慢）
+      }
+    }
+
+    function isGloballySolvable(){
+      const backupBoard = board.map(row => row.slice());
+      const backupTiles = JSON.parse(JSON.stringify(tilesMap));
+      let pairsLeft = Object.keys(backupTiles).length / 2;
+
+      while(pairsLeft > 0){
+        let found = false;
+        const ids = Object.keys(backupTiles).map(Number);
+        for(let i=0;i<ids.length;i++){
+          for(let j=i+1;j<ids.length;j++){
+            const a = backupTiles[ids[i]], b = backupTiles[ids[j]];
+            if(!a || !b || a.val !== b.val) continue;
+            if(canConnectSim(backupBoard, a.r, a.c, b.r, b.c)){
+              // 消掉这对并继续
+              backupBoard[a.r][a.c] = 0;
+              backupBoard[b.r][b.c] = 0;
+              delete backupTiles[ids[i]]; delete backupTiles[ids[j]];
+              pairsLeft--; found = true; break;
+            }
+          }
+          if(found) break;
+        }
+        if(!found) return false;
+      }
+      return true;
+    }
+
+    // 用于可解性检测的简化连通性检查（返回 true/false）
+    function canConnectSim(boardSim, r1, c1, r2, c2){
+      const R = rows+2, C = cols+2;
+      const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
+      const visited = Array.from({length:R}, ()=>Array.from({length:C}, ()=>Array(4).fill(99)));
+      const q = [];
+      for(let d=0; d<4; d++){ visited[r1][c1][d] = 0; q.push({r:r1,c:c1,dir:d,turns:0}); }
+      function pass(nr,nc){ if(nr<0||nr>=R||nc<0||nc>=C) return false; if(nr===r2&&nc===c2) return true; return boardSim[nr][nc]===0; }
+      while(q.length){
+        const cur = q.shift();
+        let nr = cur.r + dirs[cur.dir][0], nc = cur.c + dirs[cur.dir][1];
+        while(nr>=0 && nr<R && nc>=0 && nc<C){
+          if(!pass(nr,nc)) break;
+          if(nr===r2 && nc===c2) return true;
+          for(let nd=0; nd<4; nd++){
+            const nt = cur.turns + (nd===cur.dir ? 0 : 1);
+            if(nt>2) continue;
+            if(visited[nr][nc][nd] > nt){ visited[nr][nc][nd] = nt; q.push({r:nr,c:nc,dir:nd,turns:nt}); }
+          }
+          nr += dirs[cur.dir][0]; nc += dirs[cur.dir][1];
+        }
+      }
+      return false;
+    }
+
+    // --- 渲染棋盘 ---
+    function render(){
+      gridEl.innerHTML = '';
+      gridEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      for(let r=1; r<=rows; r++){
+        for(let c=1; c<=cols; c++){
+          const cell = document.createElement('div'); cell.className = 'cell';
+          const id = board[r][c];
+          if(id){
+            const tile = document.createElement('div'); tile.className = 'tile cover';
+            tile.textContent = tilesMap[id].val; tile.dataset.id = id;
+            // 点击与触摸事件都指向统一处理函数 onTileClick
+            tile.addEventListener('click', onTileClick);
+            tile.addEventListener('touchstart', function(e){ e.preventDefault(); onTileClick.call(this, e); }, {passive:false});
+            cell.appendChild(tile);
+            tilesMap[id].el = tile;
+          }
+          gridEl.appendChild(cell);
+        }
+      }
+      matchedEl.textContent = matchedCount;
+      movesEl.textContent = moves;
+      remainingEl.textContent = totalPairs - matchedCount;
+      applyScale();
+    }
+
+    function applyScale(){ const s = Number(scaleEl.value)/100; gridEl.style.transform = `scale(${s})`; gridEl.style.transformOrigin = 'center'; }
+
+    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]] = [arr[j],arr[i]]; } }
+
+    // --- 关键：处理点击（已修复） ---
+    function onTileClick(e){
+      // 支持通过 addEventListener 的调用或 call(this, e) 的调用
+      const tileEl = (e && e.currentTarget) || (this && this.dataset && this.dataset.id ? this : (e && e.target)) ;
+      if(!tileEl) return;
+      const id = Number(tileEl.dataset.id);
+      if(!id || !tilesMap[id]) return;
+
+      if(!timerId) startTimer();
+      if(tileEl.classList.contains('hidden')) return;
+
+      // 取消选择
+      if(selected && selected === id){ tileEl.classList.remove('selected'); selected = null; return; }
+
+      if(selected === null){ selected = id; tileEl.classList.add('selected'); return; }
+
+      // 第二次选择：尝试匹配
+      const firstId = selected; const secondId = id;
+      moves++; movesEl.textContent = moves;
+      const firstEl = tilesMap[firstId] && tilesMap[firstId].el;
+      if(firstEl) firstEl.classList.remove('selected');
+      selected = null;
+      if(firstId === secondId) return;
+
+      // 值不同直接反馈
+      if(tilesMap[firstId].val !== tilesMap[secondId].val){
+        if(tilesMap[secondId] && tilesMap[secondId].el){
+          tilesMap[secondId].el.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:220});
+        }
+        return;
+      }
+
+      // 值相同，尝试找连线
+      const path = canConnect(tilesMap[firstId].r, tilesMap[firstId].c, tilesMap[secondId].r, tilesMap[secondId].c);
+      if(path){
+        // 匹配成功
+        matchedCount++; matchedEl.textContent = matchedCount; remainingEl.textContent = totalPairs - matchedCount;
+        if(tilesMap[firstId] && tilesMap[firstId].el) tilesMap[firstId].el.classList.add('hidden');
+        if(tilesMap[secondId] && tilesMap[secondId].el) tilesMap[secondId].el.classList.add('hidden');
+        // 从逻辑盘面移除
+        board[tilesMap[firstId].r][tilesMap[firstId].c] = 0;
+        board[tilesMap[secondId].r][tilesMap[secondId].c] = 0;
+        // 画路径
+        drawPathOnBoard(path);
+        // 清理引用
+        delete tilesMap[firstId]; delete tilesMap[secondId];
+        // 检查胜利
+        if(matchedCount >= totalPairs){ setTimeout(()=>{ alert('恭喜！所有配对已完成！用时：' + formatTime(timer) + '，步数：' + moves); resetTimer(); }, 160); }
+      } else {
+        // 无法连通，提示反馈
+        if(tilesMap[secondId] && tilesMap[secondId].el){ tilesMap[secondId].el.animate([{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:160}); }
+      }
+    }
+
+    // --- 寻路：返回路径点数组（支持外边界坐标） ---
+    function canConnect(r1,c1,r2,c2){
+      const R = rows+2, C = cols+2;
+      const visited = Array.from({length:R}, ()=>Array.from({length:C}, ()=>Array(4).fill(99)));
+      const dirs = [[-1,0],[1,0],[0,-1],[0,1]]; // 上下左右
+      const q = [];
+      for(let d=0; d<4; d++){ visited[r1][c1][d] = 0; q.push({r:r1,c:c1,dir:d,turns:0,prev:null}); }
+
+      function passable(nr,nc){ if(nr<0||nr>=R||nc<0||nc>=C) return false; if(nr===r2 && nc===c2) return true; return board[nr] && board[nr][nc]===0; }
+
+      while(q.length){
+        const cur = q.shift();
+        let nr = cur.r + dirs[cur.dir][0];
+        let nc = cur.c + dirs[cur.dir][1];
+        while(nr>=0 && nr<R && nc>=0 && nc<C){
+          if(!passable(nr,nc)) break;
+          if(nr===r2 && nc===c2){
+            // 找到目标：重建路径
+            const path = reconstruct({r:nr,c:nc,dir:cur.dir,prev:{r:cur.r,c:cur.c,dir:cur.dir,prev:cur.prev}});
+            return path;
+          }
+          for(let nd=0; nd<4; nd++){
+            const extraTurns = (nd===cur.dir)?0:1;
+            const newTurns = cur.turns + extraTurns;
+            if(newTurns>2) continue;
+            if(visited[nr][nc][nd] > newTurns){ visited[nr][nc][nd] = newTurns; q.push({r:nr,c:nc,dir:nd,turns:newTurns,prev:{r:cur.r,c:cur.c,dir:cur.dir,prev:cur.prev}}); }
+          }
+          nr += dirs[cur.dir][0]; nc += dirs[cur.dir][1];
+        }
+      }
+      return null;
+
+      function reconstruct(node){
+        const pts = [];
+        pts.push({r:node.r,c:node.c});
+        let cur = node.prev;
+        while(cur){ pts.push({r:cur.r,c:cur.c}); cur = cur.prev; }
+        pts.reverse();
+        return pts;
+      }
+    }
+
+    // --- 绘制路径（支持边界点） ---
+    function drawPathOnBoard(path){
+      clearPathLines(); if(!path || !path.length) return;
+      const rect = gridEl.getBoundingClientRect(); if(rect.width===0 || rect.height===0) return;
+      const cellW = rect.width / cols; const cellH = rect.height / rows;
+      function centerFor(p){
+        const cx = (p.c <= 0) ? (-cellW/2) : (p.c > cols) ? (rect.width + cellW/2) : ((p.c - 1 + 0.5) * cellW);
+        const cy = (p.r <= 0) ? (-cellH/2) : (p.r > rows) ? (rect.height + cellH/2) : ((p.r - 1 + 0.5) * cellH);
+        return [cx, cy];
+      }
+      const points = path.map(p => centerFor(p));
+      const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('class','path-line'); svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`); svg.style.left='0px'; svg.style.top='0px'; svg.style.width='100%'; svg.style.height='100%';
+      const pathEl = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+      const pts = points.map(p=>p.join(',')).join(' ');
+      pathEl.setAttribute('points', pts); pathEl.setAttribute('fill','none'); pathEl.setAttribute('stroke','rgba(6,182,212,0.95)'); pathEl.setAttribute('stroke-width', Math.max(3, Math.min(8, rect.width/160))); pathEl.setAttribute('stroke-linecap','round'); pathEl.setAttribute('stroke-linejoin','round');
+      svg.appendChild(pathEl); gridEl.appendChild(svg);
+      try{ const anim = pathEl.animate([{opacity:1},{opacity:0}],{duration:700}); anim.onfinish = ()=>{ try{ svg.remove(); }catch(e){} }; }catch(e){ setTimeout(()=>{ try{ svg.remove(); }catch(e){} },700); }
+    }
+
+    function clearPathLines(){ const els = gridEl.querySelectorAll('.path-line'); els.forEach(e=>e.remove()); }
+
+    // --- 提示功能：找到任意可连的对并短暂高亮 ---
+    function findHint(){
+      const ids = Object.keys(tilesMap).map(x=>Number(x));
+      for(let i=0;i<ids.length;i++){
+        for(let j=i+1;j<ids.length;j++){
+          const a = tilesMap[ids[i]], b = tilesMap[ids[j]];
+          if(!a||!b) continue; if(a.val !== b.val) continue;
+          const p = canConnect(a.r, a.c, b.r, b.c);
+          if(p) return [ids[i], ids[j], p];
+        }
+      }
+      return null;
+    }
+
+    function hintAction(){
+      const found = findHint();
+      if(!found){ alert('没有可消除的配对（可能已经无解），你可以重新开始。'); return; }
+      const [id1,id2,path] = found; const el1 = tilesMap[id1] && tilesMap[id1].el; const el2 = tilesMap[id2] && tilesMap[id2].el;
+      if(el1) el1.classList.add('selected'); if(el2) el2.classList.add('selected');
+      drawPathOnBoard(path);
+      setTimeout(()=>{ if(el1) el1.classList.remove('selected'); if(el2) el2.classList.remove('selected'); clearPathLines(); },700);
+      moves++; movesEl.textContent = moves;
+    }
+
+    // --- 新游戏 ---
+    function newGame(){ setDifficulty(difficultyEl.value); moves = 0; matchedCount = 0; selected = null; resetTimer(); generateSolvableBoard(); render(); }
+
+    // 绑定 UI
+    newBtn.addEventListener('click', newGame);
+    difficultyEl.addEventListener('change', newGame);
+    hintBtn.addEventListener('click', hintAction);
+    scaleEl.addEventListener('input', applyScale);
+
+    // 初始启动
+    newGame();
+
+    // 监听窗口尺寸变化以刷新路径等
+    window.addEventListener('resize', ()=>{ clearPathLines(); applyScale(); });
+
+    // 触摸阻止默认滚动
+    gridEl.addEventListener('touchmove', (e)=>{ e.preventDefault(); }, {passive:false});
+
+  })();
+  </script>
+</body>
+</html>

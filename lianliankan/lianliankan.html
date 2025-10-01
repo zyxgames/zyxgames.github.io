@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>连连看大挑战</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1', // 主色调：靛蓝色
+            secondary: '#ec4899', // 辅助色：粉色
+            accent: '#8b5cf6', // 强调色：紫色
+            neutral: '#1f2937', // 中性色：深灰
+          },
+          fontFamily: {
+            game: ['"Comic Sans MS"', '"Marker Felt"', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .game-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover:not(.matched):not(.selected) {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+      }
+      .selected {
+        border-color: #ec4899;
+        box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.5);
+      }
+      .matched {
+        animation: fadeOut 0.5s ease-out forwards;
+      }
+      @keyframes fadeOut {
+        0% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(0.8); }
+      }
+      .celebration {
+        animation: celebrate 1s ease-out;
+      }
+      @keyframes celebrate {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.5); }
+        100% { transform: scale(1); }
+      }
+      /* 确保游戏卡片在小屏幕上适当缩小 */
+      .game-card {
+        min-width: 0;
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen font-game text-neutral">
+  <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- 游戏标题 -->
+    <header class="text-center mb-8">
+      <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-primary mb-2 tracking-wide">连连看大挑战</h1>
+      <p class="text-slate-600 text-lg">找出相同的图标，用不超过三条线连接它们</p>
+    </header>
+    
+    <!-- 游戏状态 -->
+    <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+      <div class="bg-white rounded-xl p-4 game-shadow flex-1 max-w-xs">
+        <p class="text-slate-500">时间</p>
+        <p id="timer" class="text-2xl font-bold text-primary">00:00</p>
+      </div>
+      
+      <div class="bg-white rounded-xl p-4 game-shadow flex-1 max-w-xs">
+        <p class="text-slate-500">得分</p>
+        <p id="score" class="text-2xl font-bold text-secondary">0</p>
+      </div>
+      
+      <div class="bg-white rounded-xl p-4 game-shadow flex-1 max-w-xs">
+        <p class="text-slate-500">剩余</p>
+        <p id="remaining" class="text-2xl font-bold text-accent">36</p>
+      </div>
+      
+      <button id="restart-btn" class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+        <i class="fa fa-refresh"></i> 重新开始
+      </button>
+    </div>
+    
+    <!-- 游戏区域 - 使用 overflow-x-auto 确保小屏幕上可以横向滚动 -->
+    <div class="relative overflow-x-auto pb-4">
+      <div class="min-w-[300px] max-w-full mx-auto">
+        <!-- 连接线Canvas -->
+        <canvas id="connection-canvas" class="absolute top-0 left-0 w-full h-full pointer-events-none z-10"></canvas>
+        
+        <!-- 游戏网格 - 固定为6列布局，在所有设备上保持一致 -->
+        <div id="game-board" class="grid grid-cols-6 gap-2 sm:gap-3 bg-white rounded-2xl p-3 sm:p-4 game-shadow"></div>
+      </div>
+    </div>
+    
+    <!-- 游戏说明 -->
+    <div class="mt-8 bg-white rounded-xl p-6 game-shadow">
+      <h2 class="text-xl font-bold text-primary mb-3">游戏规则</h2>
+      <ul class="list-disc pl-5 space-y-2 text-slate-700">
+        <li>点击两个相同的图标，如果它们可以用不超过三条直线连接，则会消除</li>
+        <li>每消除一对图标得10分</li>
+        <li>越快完成游戏，得分越高</li>
+        <li>消除所有图标即可获胜</li>
+      </ul>
+    </div>
+    
+    <!-- 胜利弹窗 -->
+    <div id="win-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center transform transition-all">
+        <div class="text-6xl mb-4 celebration">🎉</div>
+        <h2 class="text-3xl font-bold text-primary mb-2">恭喜你赢了！</h2>
+        <p class="text-xl mb-4">你的得分: <span id="final-score" class="font-bold text-secondary">0</span></p>
+        <p class="text-xl mb-6">用时: <span id="final-time" class="font-bold text-accent">00:00</span></p>
+        <button id="play-again-btn" class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105">
+          再玩一次
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 游戏配置 - 保持6x6的固定布局
+    const config = {
+      rows: 6,
+      cols: 6,
+      icons: [
+        'fa-heart', 'fa-star', 'fa-diamond', 'fa-bolt', 'fa-leaf', 
+        'fa-car', 'fa-plane', 'fa-rocket', 'fa-coffee', 'fa-cutlery',
+        'fa-gamepad', 'fa-music', 'fa-paint-brush', 'fa-book', 'fa-camera',
+        'fa-bell', 'fa-gift', 'fa-anchor'
+      ]
+    };
+    
+    // 游戏状态
+    const gameState = {
+      board: [],
+      selected: [],
+      matched: [],
+      score: 0,
+      time: 0,
+      timerInterval: null,
+      isProcessing: false
+    };
+    
+    // DOM元素
+    const gameBoard = document.getElementById('game-board');
+    const timerElement = document.getElementById('timer');
+    const scoreElement = document.getElementById('score');
+    const remainingElement = document.getElementById('remaining');
+    const restartButton = document.getElementById('restart-btn');
+    const winModal = document.getElementById('win-modal');
+    const finalScoreElement = document.getElementById('final-score');
+    const finalTimeElement = document.getElementById('final-time');
+    const playAgainButton = document.getElementById('play-again-btn');
+    const canvas = document.getElementById('connection-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // 初始化游戏
+    function initGame() {
+      // 重置游戏状态
+      gameState.board = [];
+      gameState.selected = [];
+      gameState.matched = [];
+      gameState.score = 0;
+      gameState.time = 0;
+      
+      // 更新UI
+      scoreElement.textContent = '0';
+      remainingElement.textContent = config.rows * config.cols;
+      
+      // 清除计时器
+      if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+      }
+      
+      // 生成游戏板
+      generateBoard();
+      
+      // 渲染游戏板
+      renderBoard();
+      
+      // 开始计时
+      startTimer();
+      
+      // 隐藏胜利弹窗
+      winModal.classList.add('hidden');
+      
+      // 重置画布
+      resizeCanvas();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    
+    // 生成游戏板
+    function generateBoard() {
+      // 计算需要的图标对数
+      const pairsNeeded = (config.rows * config.cols) / 2;
+      
+      // 选择足够的图标并复制成双
+      const selectedIcons = [...config.icons.slice(0, pairsNeeded), ...config.icons.slice(0, pairsNeeded)];
+      
+      // 打乱图标顺序
+      shuffleArray(selectedIcons);
+      
+      // 创建游戏板
+      for (let i = 0; i < config.rows; i++) {
+        gameState.board[i] = [];
+        for (let j = 0; j < config.cols; j++) {
+          const index = i * config.cols + j;
+          gameState.board[i][j] = {
+            icon: selectedIcons[index],
+            matched: false
+          };
+        }
+      }
+    }
+    
+    // 渲染游戏板
+    function renderBoard() {
+      gameBoard.innerHTML = '';
+      
+      for (let i = 0; i < config.rows; i++) {
+        for (let j = 0; j < config.cols; j++) {
+          const cell = gameState.board[i][j];
+          const cellElement = document.createElement('div');
+          
+          // 设置基础样式 - 添加game-card类确保在小屏幕上适当缩放
+          cellElement.className = `aspect-square rounded-xl flex items-center justify-center card-hover game-card border-2 ${
+            cell.matched ? 'opacity-0 pointer-events-none' : 
+            gameState.selected.some(s => s.row === i && s.col === j) ? 'selected bg-primary/5' : 'border-slate-200 bg-white'
+          }`;
+          
+          // 根据屏幕尺寸调整图标大小
+          cellElement.innerHTML = `<i class="fa ${cell.icon} text-[clamp(1.5rem,5vw,3xl)] ${cell.matched ? '' : 'text-primary'}"></i>`;
+          
+          // 添加点击事件（如果未匹配）
+          if (!cell.matched) {
+            cellElement.addEventListener('click', () => handleCellClick(i, j));
+          }
+          
+          // 设置数据属性，用于位置识别
+          cellElement.dataset.row = i;
+          cellElement.dataset.col = j;
+          
+          gameBoard.appendChild(cellElement);
+        }
+      }
+    }
+    
+    // 处理单元格点击
+    function handleCellClick(row, col) {
+      // 如果正在处理中，忽略点击
+      if (gameState.isProcessing) return;
+      
+      // 获取当前单元格
+      const cell = gameState.board[row][col];
+      
+      // 如果已经匹配或已经选中，忽略点击
+      if (cell.matched || gameState.selected.some(s => s.row === row && s.col === col)) return;
+      
+      // 添加到选中
+      gameState.selected.push({ row, col });
+      
+      // 重新渲染
+      renderBoard();
+      
+      // 如果选中了两个，检查是否匹配
+      if (gameState.selected.length === 2) {
+        checkForMatch();
+      }
+    }
+    
+    // 检查是否匹配
+    function checkForMatch() {
+      gameState.isProcessing = true;
+      
+      const [first, second] = gameState.selected;
+      const firstCell = gameState.board[first.row][first.col];
+      const secondCell = gameState.board[second.row][second.col];
+      
+      // 检查图标是否相同
+      if (firstCell.icon === secondCell.icon) {
+        // 检查是否可以连接
+        if (canConnect(first.row, first.col, second.row, second.col)) {
+          // 绘制连接线
+          drawConnection(first.row, first.col, second.row, second.col);
+          
+          // 短暂延迟后标记为匹配
+          setTimeout(() => {
+            // 标记为匹配
+            firstCell.matched = true;
+            secondCell.matched = true;
+            
+            // 增加分数
+            gameState.score += 10;
+            scoreElement.textContent = gameState.score;
+            
+            // 更新剩余数量
+            const remaining = (config.rows * config.cols) - gameState.board.flat().filter(cell => cell.matched).length;
+            remainingElement.textContent = remaining;
+            
+            // 清除连接线
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 重新渲染
+            renderBoard();
+            
+            // 检查是否获胜
+            checkWin();
+            
+            gameState.selected = [];
+            gameState.isProcessing = false;
+          }, 800);
+        } else {
+          // 不能连接，取消选择
+          setTimeout(() => {
+            gameState.selected = [];
+            renderBoard();
+            gameState.isProcessing = false;
+          }, 500);
+        }
+      } else {
+        // 图标不同，取消选择
+        setTimeout(() => {
+          gameState.selected = [];
+          renderBoard();
+          gameState.isProcessing = false;
+        }, 500);
+      }
+    }
+    
+    // 检查两个单元格是否可以连接（不超过三条线）
+    function canConnect(r1, c1, r2, c2) {
+      // 同一单元格
+      if (r1 === r2 && c1 === c2) return false;
+      
+      // 直接连接（同一行或同一列，且中间没有障碍）
+      if (isDirectlyConnected(r1, c1, r2, c2)) return true;
+      
+      // 一条折线连接（一个转折点）
+      if (hasOneTurnConnection(r1, c1, r2, c2)) return true;
+      
+      // 两条折线连接（两个转折点）
+      if (hasTwoTurnsConnection(r1, c1, r2, c2)) return true;
+      
+      return false;
+    }
+    
+    // 检查是否可以直接连接（同一行或列，无障碍物）
+    function isDirectlyConnected(r1, c1, r2, c2) {
+      // 同一行
+      if (r1 === r2) {
+        const minCol = Math.min(c1, c2);
+        const maxCol = Math.max(c1, c2);
+        
+        // 检查中间是否有障碍物
+        for (let c = minCol + 1; c < maxCol; c++) {
+          if (!gameState.board[r1][c].matched) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      // 同一列
+      if (c1 === c2) {
+        const minRow = Math.min(r1, r2);
+        const maxRow = Math.max(r1, r2);
+        
+        // 检查中间是否有障碍物
+        for (let r = minRow + 1; r < maxRow; r++) {
+          if (!gameState.board[r][c1].matched) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // 检查是否可以通过一个转折点连接
+    function hasOneTurnConnection(r1, c1, r2, c2) {
+      // 检查两个可能的转折点：(r1, c2) 和 (r2, c1)
+      return (
+        // 转折点 (r1, c2)
+        (isPathClear(r1, c1, r1, c2) && isPathClear(r1, c2, r2, c2)) ||
+        // 转折点 (r2, c1)
+        (isPathClear(r1, c1, r2, c1) && isPathClear(r2, c1, r2, c2))
+      );
+    }
+    
+    // 检查是否可以通过两个转折点连接
+    function hasTwoTurnsConnection(r1, c1, r2, c2) {
+      // 检查同一行的所有可能点
+      for (let r = 0; r < config.rows; r++) {
+        if (isPathClear(r1, c1, r, c1) && isPathClear(r, c1, r, c2) && isPathClear(r, c2, r2, c2)) {
+          return true;
+        }
+      }
+      
+      // 检查同一列的所有可能点
+      for (let c = 0; c < config.cols; c++) {
+        if (isPathClear(r1, c1, r1, c) && isPathClear(r1, c, r2, c) && isPathClear(r2, c, r2, c2)) {
+          return true;
+        }
+      }
+      
+      return false;
+    }
+    
+    // 检查两点之间的路径是否通畅
+    function isPathClear(r1, c1, r2, c2) {
+      // 同一行
+      if (r1 === r2) {
+        const minCol = Math.min(c1, c2);
+        const maxCol = Math.max(c1, c2);
+        
+        for (let c = minCol; c <= maxCol; c++) {
+          // 跳过起点和终点
+          if ((r1 === r1 && c === c1) || (r1 === r2 && c === c2)) continue;
+          
+          if (!gameState.board[r1][c].matched) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      // 同一列
+      if (c1 === c2) {
+        const minRow = Math.min(r1, r2);
+        const maxRow = Math.max(r1, r2);
+        
+        for (let r = minRow; r <= maxRow; r++) {
+          // 跳过起点和终点
+          if ((r === r1 && c1 === c1) || (r === r2 && c1 === c2)) continue;
+          
+          if (!gameState.board[r][c1].matched) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // 绘制连接线
+    function drawConnection(r1, c1, r2, c2) {
+      // 获取单元格元素
+      const cells = document.querySelectorAll('#game-board > div');
+      const cellSize = cells[0].offsetWidth;
+      const gap = parseInt(getComputedStyle(gameBoard).gap);
+      const padding = parseInt(getComputedStyle(gameBoard).padding);
+      
+      // 计算实际位置
+      const getPosition = (r, c) => {
+        const index = r * config.cols + c;
+        const rect = cells[index].getBoundingClientRect();
+        const boardRect = gameBoard.getBoundingClientRect();
+        
+        return {
+          x: rect.left + rect.width / 2 - boardRect.left,
+          y: rect.top + rect.height / 2 - boardRect.top
+        };
+      };
+      
+      const pos1 = getPosition(r1, c1);
+      const pos2 = getPosition(r2, c2);
+      
+      // 清除之前的绘制
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // 绘制线
+      ctx.beginPath();
+      ctx.moveTo(pos1.x, pos1.y);
+      
+      // 检查连接类型并绘制相应的线
+      if (isDirectlyConnected(r1, c1, r2, c2)) {
+        // 直线连接
+        ctx.lineTo(pos2.x, pos2.y);
+      } else if (hasOneTurnConnection(r1, c1, r2, c2)) {
+        // 检查哪个转折点可用
+        if (isPathClear(r1, c1, r1, c2) && isPathClear(r1, c2, r2, c2)) {
+          // 转折点 (r1, c2)
+          const turnPos = getPosition(r1, c2);
+          ctx.lineTo(turnPos.x, turnPos.y);
+          ctx.lineTo(pos2.x, pos2.y);
+        } else {
+          // 转折点 (r2, c1)
+          const turnPos = getPosition(r2, c1);
+          ctx.lineTo(turnPos.x, turnPos.y);
+          ctx.lineTo(pos2.x, pos2.y);
+        }
+      } else {
+        // 寻找两个转折点
+        let found = false;
+        
+        // 尝试同一行的转折点
+        for (let r = 0; r < config.rows && !found; r++) {
+          if (isPathClear(r1, c1, r, c1) && isPathClear(r, c1, r, c2) && isPathClear(r, c2, r2, c2)) {
+            const turn1 = getPosition(r, c1);
+            const turn2 = getPosition(r, c2);
+            ctx.lineTo(turn1.x, turn1.y);
+            ctx.lineTo(turn2.x, turn2.y);
+            ctx.lineTo(pos2.x, pos2.y);
+            found = true;
+          }
+        }
+        
+        // 尝试同一列的转折点
+        if (!found) {
+          for (let c = 0; c < config.cols && !found; c++) {
+            if (isPathClear(r1, c1, r1, c) && isPathClear(r1, c, r2, c) && isPathClear(r2, c, r2, c2)) {
+              const turn1 = getPosition(r1, c);
+              const turn2 = getPosition(r2, c);
+              ctx.lineTo(turn1.x, turn1.y);
+              ctx.lineTo(turn2.x, turn2.y);
+              ctx.lineTo(pos2.x, pos2.y);
+              found = true;
+            }
+          }
+        }
+      }
+      
+      // 设置线样式并绘制
+      ctx.strokeStyle = '#ec4899';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+    }
+    
+    // 开始计时器
+    function startTimer() {
+      gameState.timerInterval = setInterval(() => {
+        gameState.time++;
+        updateTimerDisplay();
+      }, 1000);
+    }
+    
+    // 更新计时器显示
+    function updateTimerDisplay() {
+      const minutes = Math.floor(gameState.time / 60).toString().padStart(2, '0');
+      const seconds = (gameState.time % 60).toString().padStart(2, '0');
+      timerElement.textContent = `${minutes}:${seconds}`;
+    }
+    
+    // 检查是否获胜
+    function checkWin() {
+      const allMatched = gameState.board.flat().every(cell => cell.matched);
+      
+      if (allMatched) {
+        // 停止计时器
+        clearInterval(gameState.timerInterval);
+        
+        // 显示胜利弹窗
+        finalScoreElement.textContent = gameState.score;
+        finalTimeElement.textContent = timerElement.textContent;
+        winModal.classList.remove('hidden');
+      }
+    }
+    
+    // 调整画布大小
+    function resizeCanvas() {
+      const boardRect = gameBoard.getBoundingClientRect();
+      canvas.width = boardRect.width;
+      canvas.height = boardRect.height;
+    }
+    
+    // 打乱数组（Fisher-Yates算法）
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    
+    // 事件监听
+    restartButton.addEventListener('click', initGame);
+    playAgainButton.addEventListener('click', initGame);
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      // 重新渲染以适应新的屏幕尺寸
+      renderBoard();
+    });
+    
+    // 初始化游戏
+    window.addEventListener('load', () => {
+      resizeCanvas();
+      initGame();
+    });
+  </script>
+</body>
+</html>
+    
