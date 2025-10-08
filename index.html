@@ -140,45 +140,79 @@
         
         <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           <!-- 扫雷 -->
-          <a href="saolei/index.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
-            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <i class="fa fa-bomb text-primary text-xl"></i>
-            </div>
-            <span class="font-medium">Minesweeper</span>
-          </a>
-          
+          <div class="relative">
+            <!-- 扫雷游戏入口卡片 -->
+            <a href="saolei/index.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover block">
+                <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                    <i class="fa fa-bomb text-primary text-xl"></i>
+                </div>
+                <span class="font-medium">Minesweeper</span>
+            </a>
+            
+            <!-- 帮助按钮 -->
+            <button class="help-btn absolute top-2 right-2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xs hover:bg-gray-300 transition-colors z-10" onclick="event.stopPropagation(); showHelp()">
+                <i class="fa fa-question"></i>
+            </button>
+        </div>
           <!-- 贪吃蛇 -->
-          <a href="tanchishe/snake-game.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
-            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <i class="fa-solid fa-dragon text-primary text-xl"></i>
-            </div>
-            <span class="font-medium">Snake</span>
-          </a>
-          
+          <div class="relative">
+              <a href="tanchishe/snake-game.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover block">
+                  <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                      <i class="fa-solid fa-dragon text-primary text-xl"></i>
+                  </div>
+                  <span class="font-medium">Snake</span>
+              </a>
+              
+              <!-- 帮助按钮 -->
+              <button class="help-btn absolute top-2 right-2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xs hover:bg-gray-300 transition-colors z-10" onclick="event.stopPropagation(); showHelp('snakeHelp')">
+                  <i class="fa fa-question"></i>
+              </button>
+          </div>
           
           <!-- 俄罗斯方块 -->
-          <a href="eluosifangkuai/tetris.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
-            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <i class="fa-solid fa-table-cells-large text-primary text-xl"></i>
-            </div>
-            <span class="font-medium">Tetris</span>
-          </a>
+          <div class="relative">
+              <a href="eluosifangkuai/tetris.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover block">
+                  <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                      <i class="fa-solid fa-table-cells-large text-primary text-xl"></i>
+                  </div>
+                  <span class="font-medium">Tetris</span>
+              </a>
+              
+              <!-- 帮助按钮 -->
+              <button class="help-btn absolute top-2 right-2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xs hover:bg-gray-300 transition-colors z-10" onclick="event.stopPropagation(); showHelp('tetrisHelp')">
+                  <i class="fa fa-question"></i>
+              </button>
+          </div>
           
           <!-- 连连看 -->
-          <a href="lianliankan/lianliankan.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
-            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <i class="fa-solid fa-link text-primary text-xl"></i>
-            </div>
-            <span class="font-medium">Lianliankan</span>
-          </a>
+          <div class="relative">
+              <a href="lianliankan/lianliankan.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover block">
+                  <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                      <i class="fa-solid fa-link text-primary text-xl"></i>
+                  </div>
+                  <span class="font-medium">Lianliankan</span>
+              </a>
+              
+              <!-- 帮助按钮 -->
+              <button class="help-btn absolute top-2 right-2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xs hover:bg-gray-300 transition-colors z-10" onclick="event.stopPropagation(); showHelp('lianliankanHelp')">
+                  <i class="fa fa-question"></i>
+              </button>
+          </div>
           
-          <!-- 连连看 -->
-          <a href="lianliankan/连连看_single_file.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
-            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <i class="fa-solid fa-link text-primary text-xl"></i>
-            </div>
-            <span class="font-medium">Lianliankan-v2</span>
-          </a>
+          <!-- 连连看v2 -->
+          <div class="relative">
+              <a href="lianliankan/连连看_single_file.html" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover block">
+                  <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                      <i class="fa-solid fa-link text-primary text-xl"></i>
+                  </div>
+                  <span class="font-medium">Lianliankan-v2</span>
+              </a>
+              
+              <!-- 帮助按钮 -->
+              <button class="help-btn absolute top-2 right-2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xs hover:bg-gray-300 transition-colors z-10" onclick="event.stopPropagation(); showHelp('lianliankanV2Help')">
+                  <i class="fa fa-question"></i>
+              </button>
+          </div>
 
           
           <!-- <a href="#" class="category-card bg-white rounded-xl p-4 flex flex-col items-center text-center game-card-shadow game-card-hover">
@@ -237,6 +271,102 @@
     </div>
   </div>
 
+  <!-- 贪吃蛇帮助弹窗 -->
+<div id="snakeHelp" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-gray-800">贪吃蛇玩法</h3>
+          <button onclick="hideHelp('snakeHelp')" class="text-gray-500 hover:text-gray-700">
+              <i class="fa fa-times"></i>
+          </button>
+      </div>
+      <div class="space-y-3 text-gray-600 text-sm">
+          <p>1. 游戏目标：控制蛇吃到食物，让蛇变得更长并获得高分。</p>
+          <p>2. 控制方式：方向键或WASD控制蛇的移动方向。</p>
+          <p>3. 游戏规则：撞到墙壁或自己的身体会导致游戏结束。</p>
+          <p>4. 得分规则：每吃一个食物得10分，蛇的长度会增加。</p>
+          <p>5. 难度递增：随着分数增加，蛇的移动速度会逐渐加快。</p>
+      </div>
+      <div class="mt-5 text-center">
+          <button onclick="hideHelp('snakeHelp')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
+              明白了
+          </button>
+      </div>
+  </div>
+</div>
+
+<!-- 俄罗斯方块帮助弹窗 -->
+<div id="tetrisHelp" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-gray-800">俄罗斯方块玩法</h3>
+          <button onclick="hideHelp('tetrisHelp')" class="text-gray-500 hover:text-gray-700">
+              <i class="fa fa-times"></i>
+          </button>
+      </div>
+      <div class="space-y-3 text-gray-600 text-sm">
+          <p>1. 游戏目标：将下落的方块填满一行，消除该行并获得分数。</p>
+          <p>2. 控制方式：左右方向键移动方块，上键旋转方块，下键加速下落。</p>
+          <p>3. 游戏规则：方块堆到顶部时游戏结束。</p>
+          <p>4. 得分规则：同时消除的行数越多，得分越高。</p>
+          <p>5. 技巧：尽量消除更多行数，保持方块堆高度较低。</p>
+      </div>
+      <div class="mt-5 text-center">
+          <button onclick="hideHelp('tetrisHelp')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
+              明白了
+          </button>
+      </div>
+  </div>
+</div>
+
+<!-- 连连看帮助弹窗 -->
+<div id="lianliankanHelp" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-gray-800">连连看玩法</h3>
+          <button onclick="hideHelp('lianliankanHelp')" class="text-gray-500 hover:text-gray-700">
+              <i class="fa fa-times"></i>
+          </button>
+      </div>
+      <div class="space-y-3 text-gray-600 text-sm">
+          <p>1. 游戏目标：找出所有成对的相同图案并消除它们。</p>
+          <p>2. 操作方式：点击两个相同的图案，如果它们之间有可连接的路径则消除。</p>
+          <p>3. 连接规则：两个图案之间的连线不能超过三条直线。</p>
+          <p>4. 胜利条件：在规定时间内消除所有图案。</p>
+          <p>5. 提示功能：遇到困难时可以使用提示功能，但会扣除一定分数。</p>
+      </div>
+      <div class="mt-5 text-center">
+          <button onclick="hideHelp('lianliankanHelp')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
+              明白了
+          </button>
+      </div>
+  </div>
+</div>
+
+<!-- 连连看v2帮助弹窗 -->
+<div id="lianliankanV2Help" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-gray-800">连连看v2玩法</h3>
+          <button onclick="hideHelp('lianliankanV2Help')" class="text-gray-500 hover:text-gray-700">
+              <i class="fa fa-times"></i>
+          </button>
+      </div>
+      <div class="space-y-3 text-gray-600 text-sm">
+          <p>1. 这是连连看的单文件版本，核心玩法与普通版一致。</p>
+          <p>2. 游戏目标：找出所有成对的相同图案并消除它们。</p>
+          <p>3. 操作方式：点击两个相同的图案，如果它们之间有可连接的路径则消除。</p>
+          <p>4. 新增功能：优化了连接判定算法，增加了多种难度模式。</p>
+          <p>5. 胜利条件：在规定时间内消除所有图案。</p>
+      </div>
+      <div class="mt-5 text-center">
+          <button onclick="hideHelp('lianliankanV2Help')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
+              明白了
+          </button>
+      </div>
+  </div>
+</div>
+
   <!-- 简单页脚 -->
   <footer class="bg-white border-t py-6 mt-auto">
     <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
@@ -260,6 +390,131 @@
        (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
 </div>
+<!-- 帮助弹窗 -->
+<div id="helpModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-gray-800">扫雷游戏玩法</h3>
+          <button onclick="hideHelp()" class="text-gray-500 hover:text-gray-700">
+              <i class="fa fa-times"></i>
+          </button>
+      </div>
+      <div class="space-y-3 text-gray-600 text-sm">
+          <p>1. 游戏目标：找出所有非地雷的格子，避免踩雷。</p>
+          <p>2. 左键点击：揭开格子，如果是地雷则游戏结束。</p>
+          <p>3. 右键点击：标记疑似地雷的格子。</p>
+          <p>4. 数字提示：格子上的数字表示周围8个格子中地雷的数量。</p>
+          <p>5. 胜利条件：成功揭开所有非地雷格子。</p>
+      </div>
+      <div class="mt-5 text-center">
+          <button onclick="hideHelp()" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
+              明白了
+          </button>
+      </div>
+  </div>
+</div>
+
+<script>
+// 显示帮助弹窗
+function showHelp() {
+  document.getElementById('helpModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden'; // 防止背景滚动
+}
+
+// 隐藏帮助弹窗
+function hideHelp() {
+  document.getElementById('helpModal').classList.add('hidden');
+  document.body.style.overflow = ''; // 恢复背景滚动
+}
+
+// 点击弹窗外部关闭弹窗
+document.getElementById('helpModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+      hideHelp();
+  }
+});
+</script>
+
+<style>
+/* 确保帮助按钮不会被卡片内容遮挡 */
+.help-btn {
+  pointer-events: auto;
+}
+
+/* 弹窗动画效果 */
+#helpModal > div {
+  animation: popIn 0.2s ease-out;
+}
+
+@keyframes popIn {
+  from {
+      transform: scale(0.9);
+      opacity: 0;
+  }
+  to {
+      transform: scale(1);
+      opacity: 1;
+  }
+}
+</style>
+<script>
+  // 显示帮助弹窗
+  function showHelp(modalId) {
+      document.getElementById(modalId).classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // 防止背景滚动
+  }
+  
+  // 隐藏帮助弹窗
+  function hideHelp(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+      document.body.style.overflow = ''; // 恢复背景滚动
+  }
+  
+  // 为所有弹窗添加点击外部关闭功能
+  document.querySelectorAll('[id$="Help"]').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+              hideHelp(this.id);
+          }
+      });
+  });
+  </script>
+<!--   
+  <style>
+  /* 确保帮助按钮不会被卡片内容遮挡 */
+  .help-btn {
+      pointer-events: auto;
+  }
+  
+  /* 弹窗动画效果 */
+  [id$="Help"] > div {
+      animation: popIn 0.2s ease-out;
+  }
+  
+  @keyframes popIn {
+      from {
+          transform: scale(0.9);
+          opacity: 0;
+      }
+      to {
+          transform: scale(1);
+          opacity: 1;
+      }
+  }
+  
+  /* 网格布局支持 */
+  @media (max-width: 640px) {
+      .grid-cols-2 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+  }
+  
+  @media (min-width: 640px) {
+      .sm\:grid-cols-4 {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+  }
+  </style> -->
   <!-- JavaScript -->
   <script>
     // 游戏弹窗控制
