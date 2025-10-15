@@ -150,7 +150,7 @@
             </a>
             
             <!-- 帮助按钮 -->
-            <button class="help-btn absolute top-2 right-2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xs hover:bg-gray-300 transition-colors z-10" onclick="event.stopPropagation(); showHelp()">
+            <button class="help-btn absolute top-2 right-2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 text-xs hover:bg-gray-300 transition-colors z-10" onclick="event.stopPropagation(); showHelp('minesweeperHelp')">
                 <i class="fa fa-question"></i>
             </button>
         </div>
@@ -281,11 +281,118 @@
           </button>
       </div>
       <div class="space-y-3 text-gray-600 text-sm">
-          <p>1. 游戏目标：控制蛇吃到食物，让蛇变得更长并获得高分。</p>
-          <p>2. 控制方式：方向键或WASD控制蛇的移动方向。</p>
-          <p>3. 游戏规则：撞到墙壁或自己的身体会导致游戏结束。</p>
-          <p>4. 得分规则：每吃一个食物得10分，蛇的长度会增加。</p>
-          <p>5. 难度递增：随着分数增加，蛇的移动速度会逐渐加快。</p>
+        <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #2c3e50; text-align: center;">贪吃蛇游戏玩法详解</h2>
+        
+          <p style="font-size: 16px;">
+            <strong>贪吃蛇（Snake）</strong> 是一款经典的街机风格益智游戏，起源于1970年代的街机游戏《Blockade》，并在诺基亚手机上风靡全球。玩家通过控制一条不断移动的“蛇”吃掉食物，使其身体变长并获得分数，同时避免撞到墙壁或自身。这款游戏以其简单直观的规则和逐渐增加的挑战性吸引了无数玩家，适合快速娱乐或追求高分的挑战。以下是贪吃蛇的详细玩法说明，带你全面体验这款永恒经典！
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">1. 游戏概述</h3>
+          <p>
+            贪吃蛇的核心玩法围绕控制一条在网格中移动的“蛇”，通过吃掉随机出现的食物来增加长度和得分。游戏考验玩家的反应速度、手眼协调能力和空间规划能力。随着蛇的移动速度加快，玩家需要在有限的空间内保持精准控制，挑战自己的极限。本版本保留了经典贪吃蛇的精髓，提供流畅的操作体验，适合新手和老玩家。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">2. 游戏目标</h3>
+          <p>
+            贪吃蛇的核心目标是<b>控制蛇吃到食物，使蛇变得更长并获得高分</b>。玩家需要引导蛇在游戏区域内移动，吃掉随机出现的食物，同时避免撞到墙壁或自己的身体。目标是尽可能延长蛇的长度，积累更高的分数，挑战更长时间的生存。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">3. 控制方式</h3>
+          <p>
+            贪吃蛇的操作简单直观，主要通过键盘控制：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>方向键</b>：使用上、下、左、右方向键控制蛇的移动方向（向上、向下、向左、向右）。</li>
+            <li><b>WASD 键</b>：部分版本支持使用 W（上）、A（左）、S（下）、D（右）键控制移动，提供替代操作方式。</li>
+            <li><b>连续移动</b>：蛇会持续朝当前方向移动，玩家需及时输入新方向以调整路径，但不能直接反向移动（例如从向上直接变为向下），以避免立即撞到自身。</li>
+            <li><b>暂停功能</b>（视版本而定）：部分版本支持按空格键或P键暂停游戏，方便玩家调整策略或休息。</li>
+          </ul>
+          <p>
+            玩家需要精准控制蛇的移动方向，快速应对食物位置和空间限制。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">4. 游戏规则</h3>
+          <p>
+            贪吃蛇的规则简单但充满挑战：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>游戏区域</b>：游戏通常在一个矩形网格中进行，四周有墙壁（或无墙循环模式，视版本而定）。</li>
+            <li><b>食物生成</b>：食物随机出现在网格的空位上，蛇接触食物后会吃掉它，身体长度增加一格。</li>
+            <li><b>移动机制</b>：蛇持续朝当前方向移动，玩家通过方向键调整路径，需避免撞到障碍。</li>
+            <li><b>游戏结束</b>：若蛇撞到墙壁（在有墙模式下）或自己的身体，游戏立即结束，玩家失败。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">5. 得分规则</h3>
+          <p>
+            贪吃蛇的得分机制鼓励玩家尽可能吃到更多食物：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>基本得分</b>：每吃一个食物，玩家获得10分，同时蛇的长度增加一格。</li>
+            <li><b>额外加分</b>（视版本而定）：某些版本可能为连续快速吃到食物、存活更长时间或在高难度下得分提供额外奖励。</li>
+            <li><b>高分目标</b>：玩家通过延长蛇的长度和生存时间，积累更高分数，挑战个人或全球排行榜。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">6. 难度递增</h3>
+          <p>
+            贪吃蛇的挑战性随着游戏进程逐渐增加：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>速度提升</b>：随着分数增加或食物被吃掉，蛇的移动速度会逐渐加快，减少玩家的反应时间。</li>
+            <li><b>空间限制</b>：蛇的长度增加后，网格中的可用空间减少，增加了撞到自身的风险。</li>
+            <li><b>难度模式</b>（视版本而定）：部分版本提供多种难度选择，例如低速模式（适合新手）、高速模式（挑战高手）或无墙模式（蛇穿过边界回到对侧）。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">7. 游戏模式</h3>
+          <p>
+            贪吃蛇提供多种模式，满足不同玩家的喜好：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>经典模式</b>：标准有墙网格，蛇撞墙或自身即失败，适合传统体验。</li>
+            <li><b>无墙模式</b>：蛇穿过网格边界会从对侧出现，增加操作空间但仍需避免撞到自身。</li>
+            <li><b>限时模式</b>：在规定时间内尽可能吃到更多食物，追求高分。</li>
+            <li><b>挑战模式</b>（视版本而定）：加入特殊食物（例如加分或减速道具）或障碍物，增加游戏复杂性。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">8. 策略与技巧</h3>
+          <p>
+            贪吃蛇不仅是反应速度的比拼，还需要空间规划和预判能力。以下是一些实用技巧：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>规划路径</b>：提前预判蛇的移动路径，避免陷入死角或被自己的身体困住。</li>
+            <li><b>保持空间开阔</b>：尽量在网格中央移动，避免靠近墙壁或密集区域，留出更多操作空间。</li>
+            <li><b>控制速度</b>：在高速模式下，保持冷静，精准输入方向，避免因慌乱导致失误。</li>
+            <li><b>利用循环策略</b>：当蛇较长时，尝试绕圈移动，吃到食物后再逐步展开，减少撞到自身的风险。</li>
+            <li><b>观察食物位置</b>：优先选择靠近且易于到达的食物，避免冒险进入狭窄区域。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">9. 游戏的魅力</h3>
+          <p>
+            贪吃蛇的魅力在于其简单却极具挑战性的设计。游戏规则一学就会，但随着蛇的增长和速度加快，玩家需要在有限空间内展现精准操作和快速反应。随机出现的食物和动态变化的游戏节奏确保每局体验不同，带来无尽的可玩性。无论是几分钟的轻松娱乐，还是追求高分的极限挑战，贪吃蛇都能让玩家沉浸其中，享受成长与突破的成就感。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">10. 额外功能（视版本而定）</h3>
+          <p>
+            现代版本的贪吃蛇可能包含以下增强功能，提升游戏体验：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>计分与排行榜</b>：记录玩家的得分和生存时间，与好友或全球玩家比拼。</li>
+            <li><b>多样化主题</b>：提供不同风格的蛇皮肤、网格背景和音乐，增加视觉与听觉乐趣。</li>
+            <li><b>道具系统</b>：部分版本加入特殊食物（如加分、减速或无敌道具），增加策略性。</li>
+            <li><b>音效与动画</b>：吃到食物或游戏结束时播放音效或动画，增强沉浸感。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">11. 小贴士</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>保持节奏</b>：适应蛇的移动速度，找到适合自己的操作节奏，避免因过快或过慢导致失误。</li>
+            <li><b>练习预判</b>：通过多局游戏，熟悉蛇的移动规律，训练快速判断食物与路径的能力。</li>
+            <li><b>享受挑战</b>：贪吃蛇是反应与策略的完美结合，享受蛇逐渐变长的成就感吧！</li>
+          </ul>
+        
+          <p style="font-size: 16px; margin-top: 20px; text-align: center;">
+            贪吃蛇以其经典玩法、简单规则和递增挑战，吸引了无数玩家挑战反应与智慧。快来控制你的蛇，追求更长的身体和更高的分数，体验这场永不过时的益智冒险！
+          </p>
+        </div>
       </div>
       <div class="mt-5 text-center">
           <button onclick="hideHelp('snakeHelp')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -305,11 +412,111 @@
           </button>
       </div>
       <div class="space-y-3 text-gray-600 text-sm">
-          <p>1. 游戏目标：将下落的方块填满一行，消除该行并获得分数。</p>
-          <p>2. 控制方式：左右方向键移动方块，上键旋转方块，下键加速下落。</p>
-          <p>3. 游戏规则：方块堆到顶部时游戏结束。</p>
-          <p>4. 得分规则：同时消除的行数越多，得分越高。</p>
-          <p>5. 技巧：尽量消除更多行数，保持方块堆高度较低。</p>
+        <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #2c3e50; text-align: center;">俄罗斯方块游戏玩法详解</h2>
+        
+          <p style="font-size: 16px;">
+            <strong>俄罗斯方块（Tetris）</strong> 是一款风靡全球的经典益智游戏，由苏联程序员阿列克谢·帕基特诺夫于1984年设计，以其简单直观的规则和极高的挑战性成为游戏史上的传奇之作。玩家通过操控下落的方块，拼凑完整行以消除得分，考验反应速度、空间思维和策略规划能力。以下是俄罗斯方块的详细玩法说明，带你全面了解这款经久不衰的游戏！
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">1. 游戏概述</h3>
+          <p>
+            俄罗斯方块的核心玩法围绕着操控不同形状的方块（称为“Tetriminos”），将它们排列在游戏区域底部，填满完整行以消除并获得分数。游戏以其简洁的设计和逐渐加快的节奏吸引了无数玩家，适合休闲娱乐或高强度挑战。本版本保留了经典玩法，同时提供流畅的操作体验，适合新手和老玩家。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">2. 游戏目标</h3>
+          <p>
+            俄罗斯方块的核心目标是<b>将下落的方块排列填满一行，消除该行并获得分数</b>。玩家需要通过移动和旋转方块，尽可能填满完整的水平行，同时避免方块堆积到游戏区域顶部。游戏的挑战在于保持区域清爽，追求更高的分数和更长的游戏时间。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">3. 控制方式</h3>
+          <p>
+            俄罗斯方块的操作简单直观，主要通过键盘控制：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>左右方向键</b>：将下落的方块向左或向右移动，调整其在游戏区域中的水平位置。</li>
+            <li><b>上方向键</b>：旋转方块（通常顺时针旋转90度），改变其形状方向以适应下方堆积的空隙。</li>
+            <li><b>下方向键</b>：加速方块的下落速度，使其更快到达底部，适合需要快速决策的场景。</li>
+            <li><b>空格键</b>（视版本而定）：直接将方块落到最底部并固定，节省时间，适合高节奏游戏。</li>
+          </ul>
+          <p>
+            玩家需要根据方块的形状和当前堆积情况，灵活使用这些控制方式，优化方块的放置位置。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">4. 游戏规则</h3>
+          <p>
+            俄罗斯方块的规则简单但充满挑战：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>方块下落</b>：游戏区域是一个垂直的矩形网格（通常10格宽，20格高）。方块从顶部随机出现，自动向下落。</li>
+            <li><b>方块形状</b>：共有7种经典方块（I、O、T、L、J、S、Z），每种由4个小方格组成，形状各异。</li>
+            <li><b>固定与消除</b>：方块落到底部或接触其他固定方块时会停止移动并固定。若固定后形成完整的水平行（无空隙），该行将被消除，剩余方块下移。</li>
+            <li><b>游戏结束</b>：当方块堆积到游戏区域顶部（通常是顶部一行被完全占据或新方块无法生成），游戏结束，玩家失败。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">5. 得分规则</h3>
+          <p>
+            俄罗斯方块的得分机制鼓励玩家追求高效消除：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>消除行数与得分</b>：同时消除的行数越多，得分越高。例如，消除1行得100分，2行得300分，3行得500分，4行得800分（具体分值因版本而异）。</li>
+            <li><b>连击加分</b>（视版本而定）：连续快速消除多行可能触发额外加分，增加高分潜力。</li>
+            <li><b>速度加成</b>：在较高难度或较快下落速度下消除行，可能获得额外分数奖励。</li>
+          </ul>
+          <p>
+            玩家通过合理规划方块位置，尽量一次性消除多行（如4行，称为“Tetris”），以获得更高分数。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">6. 游戏难度与模式</h3>
+          <p>
+            俄罗斯方块提供多种难度和模式，满足不同玩家的需求：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>初级模式</b>：方块下落速度较慢，适合新手熟悉操作和规则。</li>
+            <li><b>中级模式</b>：下落速度加快，方块形状随机性增加，考验反应和规划能力。</li>
+            <li><b>高级模式</b>：方块下落速度极快，挑战玩家的极限反应和策略技巧。</li>
+            <li><b>特殊模式</b>（视版本而定）：如限时模式（在规定时间内尽可能得分）、马拉松模式（无尽游戏，追求最长生存时间）或对战模式（与对手竞争消除速度）。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">7. 策略与技巧</h3>
+          <p>
+            俄罗斯方块不仅是反应速度的比拼，还需要空间思维和策略规划。以下是一些实用技巧：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>保持堆高度低</b>：尽量快速消除行，避免方块堆积过高，留出更多操作空间。</li>
+            <li><b>规划空隙</b>：为不同形状的方块预留合适空隙，尤其是“I”形方块（直条），以实现一次性消除4行的高分。</li>
+            <li><b>优先消除多行</b>：通过合理旋转和移动，尽量堆叠方块以同时消除2行、3行或4行，最大化得分。</li>
+            <li><b>快速决策</b>：在高难度模式下，利用下方向键或空格键加速下落，减少反应时间。</li>
+            <li><b>观察预览</b>：注意游戏界面显示的下一个方块，提前规划当前方块的放置位置。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">8. 游戏的魅力</h3>
+          <p>
+            俄罗斯方块的魅力在于其简单却深邃的玩法。规则易于上手，但随着速度加快和方块堆积，游戏对玩家的反应速度、空间感知和策略规划提出越来越高的要求。随机出现的方块和逐渐增加的难度带来无尽挑战，玩家既能享受短时间的轻松娱乐，也能追求高分和长时间生存的成就感。游戏的节奏感和消除时的满足感让人欲罢不能，堪称益智游戏的巅峰之作。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">9. 额外功能（视版本而定）</h3>
+          <p>
+            现代版本的俄罗斯方块可能包含以下增强功能，提升游戏体验：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>计分与排行榜</b>：记录玩家的得分和游戏时长，与好友或全球玩家比拼。</li>
+            <li><b>多样化主题</b>：提供不同风格的方块设计、背景和音乐，增加视觉与听觉乐趣。</li>
+            <li><b>暂停与预览</b>：支持暂停功能和下一个方块的预览，方便玩家调整策略。</li>
+            <li><b>音效与动画</b>：消除行时播放音效或显示特效，增强沉浸感。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">10. 小贴士</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>保持冷静</b>：在高速度模式下，避免慌乱，专注于当前方块的放置和下一个方块的规划。</li>
+            <li><b>练习旋转</b>：熟练掌握方块旋转技巧，尤其是L、J、S、Z形方块的灵活运用，能显著提高效率。</li>
+            <li><b>享受节奏</b>：俄罗斯方块是速度与策略的结合，沉浸在消除行的节奏感中，享受游戏的乐趣吧！</li>
+          </ul>
+        
+          <p style="font-size: 16px; margin-top: 20px; text-align: center;">
+            俄罗斯方块以其经典玩法、挑战性与趣味性并存的设计，吸引了无数玩家挑战反应与智慧。快来操控方块，追求更高的分数，体验这场永不过时的益智冒险！
+          </p>
+        </div>
       </div>
       <div class="mt-5 text-center">
           <button onclick="hideHelp('tetrisHelp')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -329,11 +536,113 @@
           </button>
       </div>
       <div class="space-y-3 text-gray-600 text-sm">
-          <p>1. 游戏目标：找出所有成对的相同图案并消除它们。</p>
-          <p>2. 操作方式：点击两个相同的图案，如果它们之间有可连接的路径则消除。</p>
-          <p>3. 连接规则：两个图案之间的连线不能超过三条直线。</p>
-          <p>4. 胜利条件：在规定时间内消除所有图案。</p>
-          <p>5. 提示功能：遇到困难时可以使用提示功能，但会扣除一定分数。</p>
+        <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #2c3e50; text-align: center;">连连看游戏玩法详解</h2>
+        
+          <p style="font-size: 16px;">
+            <strong>连连看</strong> 是一款风靡全球的益智消除类游戏，以其简单直观的操作和充满挑战的玩法吸引了无数玩家。游戏通过配对相同的图案并消除它们，考验玩家的观察力、反应速度和逻辑规划能力。本版本优化了游戏体验，加入了提示功能等实用特性，让玩家在轻松娱乐与高强度挑战之间自由切换。以下是连连看游戏的详细玩法说明：
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">1. 游戏概述</h3>
+          <p>
+            连连看（Link Link 或 Mahjong Connect）起源于传统的麻将配对游戏，玩家需要在网格中找到并连接相同的图案，通过消除所有图案完成关卡。游戏以其简单规则和多样化的挑战性著称，适合各年龄段玩家。本版本通过优化的连接判定和新增的提示功能，为玩家提供了更流畅、更具趣味性的游戏体验。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">2. 游戏目标</h3>
+          <p>
+            连连看的核心目标是<b>找出所有成对的相同图案并将其消除</b>。玩家需要在游戏区域内识别两个相同的图案（如动物、植物、麻将牌等），通过点击配对并确保两者之间存在可连接的路径来清除它们。最终目标是在规定的时间内清空整个网格，达成胜利。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">3. 基本操作</h3>
+          <p>
+            连连看的操作简单直观，主要通过鼠标点击完成：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>点击配对</b>：玩家点击两个相同的图案，如果它们之间存在符合规则的连接路径，图案将被消除，并为玩家增加分数。</li>
+            <li><b>路径规则</b>：两个图案之间的连线必须满足特定条件（详见连接规则），确保路径畅通无阻。</li>
+            <li><b>提示功能</b>：当玩家遇到困难无法找到可配对的图案时，可使用提示功能，系统会高亮显示一对可消除的图案，但使用提示会扣除一定分数。</li>
+            <li><b>洗牌功能</b>（视版本而定）：若当前布局无有效配对，游戏可能提供洗牌功能，重新排列图案，增加解决问题的机会。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">4. 连接规则</h3>
+          <p>
+            连连看的配对核心在于连接路径的有效性，具体规则如下：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>最多三条直线</b>：两个相同图案之间的连线不能超过三条直线（即最多两次转折）。路径可以是水平、垂直或两者的组合，但不能穿过其他图案。</li>
+            <li><b>无障碍路径</b>：连接路径必须在网格的空白区域内，不能被其他图案阻挡。</li>
+            <li><b>路径优化</b>：本版本优化了路径判定算法，确保快速准确地判断配对是否有效，并可能通过高亮显示路径，提升玩家体验。</li>
+          </ul>
+          <p>
+            例如，两个相同的图案若位于同一行且中间无其他图案，可直接水平连接；若位于不同行但可以通过一次或两次转折连接，也可消除。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">5. 提示功能</h3>
+          <p>
+            本版本新增的<b>提示功能</b>为玩家提供了额外帮助：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>功能用途</b>：当玩家卡关或难以找到可配对的图案时，点击提示按钮，系统会自动高亮一对可消除的图案。</li>
+            <li><b>代价机制</b>：使用提示会扣除一定分数，鼓励玩家优先依靠自己的观察力和推理能力，增加游戏挑战性。</li>
+            <li><b>使用限制</b>：提示次数可能有限（视版本而定），玩家需谨慎使用，以在关键时刻获得帮助。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">6. 胜利与失败</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>胜利条件</b>：在规定时间内成功消除所有图案，游戏结束并宣告胜利。游戏通常显示玩家的得分、用时和剩余时间，部分版本提供排行榜记录最佳成绩。</li>
+            <li><b>失败条件</b>：若时间耗尽而未能清空所有图案，游戏结束，玩家失败。系统可能显示剩余未消除的图案，帮助玩家总结经验。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">7. 游戏难度与模式</h3>
+          <p>
+            连连看提供多种难度模式，满足不同玩家的需求：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>初级模式</b>：网格较小（例如6×6），图案种类少，时间限制宽松，适合新手快速上手。</li>
+            <li><b>中级模式</b>：网格扩大（例如8×8），图案种类增加，时间限制适中，考验观察力和速度。</li>
+            <li><b>高级模式</b>：网格更大（例如10×10或更大），图案复杂多样，时间严格，挑战高手玩家。</li>
+            <li><b>自定义模式</b>（视版本而定）：玩家可调整网格大小、图案种类或时间限制，打造个性化挑战。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">8. 策略与技巧</h3>
+          <p>
+            连连看不仅考验眼力，还需要策略规划和快速反应。以下是一些实用技巧：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>优先清理边缘</b>：从网格四周开始消除图案，可以打开更多路径，减少后期卡关的可能性。</li>
+            <li><b>快速识别相同图案</b>：训练快速扫描网格的能力，优先选择靠近且易连接的配对，提高效率。</li>
+            <li><b>规划连接路径</b>：点击前预判路径是否符合“最多三条直线”规则，避免无效尝试。</li>
+            <li><b>合理使用提示</b>：在复杂局面中使用提示功能，但尽量减少依赖，以保持高分。</li>
+            <li><b>时间管理</b>：保持稳定的消除节奏，避免在单一配对上耗费过多时间，确保在时限内完成。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">9. 游戏的魅力</h3>
+          <p>
+            连连看的魅力在于其简单规则与深层挑战的完美结合。游戏既适合短时间的轻松娱乐，也能通过高难度模式挑战玩家的极限。随机生成的图案布局和多样化的难度选择，确保每局游戏都充满新鲜感。优化的路径判定和提示功能进一步提升了游戏的流畅性和可玩性，让玩家在消除图案的过程中享受成就感和乐趣。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">10. 额外功能（视版本而定）</h3>
+          <p>
+            本版本可能包含以下增强功能，提升整体体验：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>计时器与计分</b>：记录玩家的用时和得分，鼓励挑战个人最佳记录。</li>
+            <li><b>多样化主题</b>：提供多种图案主题（如水果、动物、麻将牌等）和背景风格，增加视觉趣味。</li>
+            <li><b>音效与动画</b>：成功配对时播放音效或显示消除动画，增强沉浸感。</li>
+            <li><b>排行榜</b>：记录高分，与好友或全球玩家比拼成绩。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">11. 小贴士</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>保持专注</b>：在复杂网格中，集中注意力寻找相同图案，避免遗漏显而易见的配对。</li>
+            <li><b>练习节奏</b>：通过多局练习，掌握快速扫描和决策的节奏，提升通关效率。</li>
+            <li><b>享受乐趣</b>：连连看是放松与挑战并存的游戏，享受配对消除的成就感吧！</li>
+          </ul>
+        
+          <p style="font-size: 16px; margin-top: 20px; text-align: center;">
+            连连看以其简单规则、丰富挑战和优化体验，适合所有玩家挑战眼力与反应速度。快来体验这场图案配对的乐趣，测试你的观察力与策略吧！
+          </p>
+        </div>
       </div>
       <div class="mt-5 text-center">
           <button onclick="hideHelp('lianliankanHelp')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -353,11 +662,100 @@
           </button>
       </div>
       <div class="space-y-3 text-gray-600 text-sm">
-          <p>1. 这是连连看的单文件版本，核心玩法与普通版一致。</p>
-          <p>2. 游戏目标：找出所有成对的相同图案并消除它们。</p>
-          <p>3. 操作方式：点击两个相同的图案，如果它们之间有可连接的路径则消除。</p>
-          <p>4. 新增功能：优化了连接判定算法，增加了多种难度模式。</p>
-          <p>5. 胜利条件：在规定时间内消除所有图案。</p>
+        <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #2c3e50; text-align: center;">连连看游戏玩法详解</h2>
+        
+          <p style="font-size: 16px;">
+            <strong>连连看</strong> 是一款经典的益智消除类游戏，以其简单易上手的操作和富有挑战性的玩法深受玩家喜爱。本单文件版本保留了传统连连看的核心乐趣，同时优化了游戏体验，新增多种功能，让玩家在寻找和消除相同图案的过程中享受逻辑与速度的双重挑战。以下是连连看游戏的详细玩法说明：
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">1. 游戏概述</h3>
+          <p>
+            连连看（Link Link 或 Mahjong Connect）起源于经典的麻将图案配对游戏，玩家需要通过连接相同的图案将其消除，最终清空整个游戏区域。本单文件版本在保留传统玩法的基础上，优化了连接判定算法，提供了更流畅的游戏体验，并新增多种难度模式，适合不同水平的玩家挑战。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">2. 游戏目标</h3>
+          <p>
+            连连看的核心目标是<b>找出所有成对的相同图案并将其消除</b>。玩家需要在游戏区域内找到两个相同的图案，确保它们之间存在可连接的路径，通过点击配对来清除它们。最终目标是在规定的时间内清空所有图案，达成胜利。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">3. 基本操作</h3>
+          <p>
+            连连看的操作简单直观，主要通过鼠标点击完成：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>点击配对</b>：玩家点击两个相同的图案（例如相同的动物、花卉或麻将图标），如果它们之间存在可连接的路径，图案将被消除，并为玩家增加分数。</li>
+            <li><b>连接规则</b>：两个图案之间必须存在一条路径，路径最多包含<b>两次转折</b>（即最多两条直线连接，且不能穿过其他图案）。路径可以是水平、垂直或两者的组合。</li>
+            <li><b>自动提示</b>（视版本而定）：部分版本提供提示功能，帮助玩家找到可配对的图案，适合新手或在复杂局面中卡关时使用。</li>
+            <li><b>洗牌功能</b>（视版本而定）：当当前布局无有效配对时，游戏可能自动或手动重新排列图案，增加解决问题的机会。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">4. 连接判定算法优化</h3>
+          <p>
+            本单文件版本对连接判定算法进行了优化，具体改进包括：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>更精准的路径计算</b>：系统能够快速判断两个图案之间是否有多于两次转折的路径，确保玩家操作流畅无误判。</li>
+            <li><b>动态路径高亮</b>：点击图案时，游戏可能显示连接路径的视觉效果，帮助玩家直观确认配对是否有效。</li>
+            <li><b>性能提升</b>：优化后的算法减少了计算延迟，即使在大型网格或高难度模式下也能保持流畅体验。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">5. 多种难度模式</h3>
+          <p>
+            为满足不同玩家的需求，本版本新增多种难度模式，丰富了游戏挑战性：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>初级模式</b>：网格较小（例如6×6），图案种类少，时间限制宽松，适合新手快速上手。</li>
+            <li><b>中级模式</b>：网格扩大（例如8×8），图案种类增加，时间限制适中，考验玩家的观察力和速度。</li>
+            <li><b>高级模式</b>：网格更大（例如10×10或更大），图案复杂且多样，时间严格，适合追求挑战的高手。</li>
+            <li><b>自定义模式</b>：玩家可调整网格大小、图案种类或时间限制，打造个性化游戏体验。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">6. 胜利与失败</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>胜利条件</b>：在规定时间内成功消除所有图案，游戏结束并宣告胜利。游戏通常会显示玩家的得分、用时和剩余时间，部分版本还提供排行榜记录最佳成绩。</li>
+            <li><b>失败条件</b>：若时间耗尽而未能清空所有图案，游戏结束，玩家失败。部分版本可能显示剩余未消除的图案，帮助玩家分析。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">7. 策略与技巧</h3>
+          <p>
+            连连看看似简单，实则需要观察力、规划能力和快速反应。以下是一些实用技巧：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>优先清理边缘</b>：从网格的四周开始消除图案，可以打开更多路径，减少后期卡关的可能性。</li>
+            <li><b>快速扫描相同图案</b>：训练快速识别相同图案的能力，尤其是复杂网格中，优先选择靠近且易连接的配对。</li>
+            <li><b>规划路径</b>：在点击前预判连接路径，避免选择需要复杂转折的配对，以节省时间。</li>
+            <li><b>利用提示和洗牌</b>：在卡关时使用提示功能，或在无有效配对时触发洗牌，重新组织布局。</li>
+            <li><b>时间管理</b>：保持节奏感，快速决策，避免在单一配对上浪费过多时间。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">8. 游戏的魅力</h3>
+          <p>
+            连连看的魅力在于其简单直观的规则与逐步加深的挑战。游戏不仅考验玩家的眼力，还要求逻辑规划和时间管理。优化的算法和多样化的难度模式让每局游戏都充满新鲜感，无论是休闲娱乐还是挑战高分，玩家都能找到乐趣。随机生成的图案布局确保每次游戏体验不同，极具可玩性。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">9. 额外功能（视版本而定）</h3>
+          <p>
+            本单文件版本可能包含以下增强功能，提升游戏体验：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>计时器与计分</b>：记录玩家的用时和得分，鼓励挑战个人最佳记录。</li>
+            <li><b>多样化主题</b>：提供多种图案主题（如动物、水果、麻将牌等）和背景风格，增加视觉趣味。</li>
+            <li><b>音效与动画</b>：成功配对时播放音效或显示消除动画，增强沉浸感。</li>
+            <li><b>排行榜</b>：记录玩家的高分，与好友或全球玩家比拼。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">10. 小贴士</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>保持专注</b>：复杂网格中，集中注意力寻找相同图案，避免遗漏显而易见的配对。</li>
+            <li><b>练习节奏</b>：通过多局练习，掌握快速扫描和决策的节奏，提升通关效率。</li>
+            <li><b>享受乐趣</b>：连连看是放松与挑战并存的游戏，享受寻找与消除的成就感吧！</li>
+          </ul>
+        
+          <p style="font-size: 16px; margin-top: 20px; text-align: center;">
+            连连看以其简单规则、多样挑战和优化体验，适合所有玩家挑战眼力与反应速度。快来体验这场图案配对的乐趣，测试你的观察力与策略吧！
+          </p>
+        </div>
       </div>
       <div class="mt-5 text-center">
           <button onclick="hideHelp('lianliankanV2Help')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -390,24 +788,113 @@
        (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
 </div>
-<!-- 帮助弹窗 -->
-<div id="helpModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+<!-- 帮助弹窗（扫雷） -->
+<div id="minesweeperHelp" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
   <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 transform transition-all">
       <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-bold text-gray-800">扫雷游戏玩法</h3>
-          <button onclick="hideHelp()" class="text-gray-500 hover:text-gray-700">
+          <button onclick="hideHelp('minesweeperHelp')" class="text-gray-500 hover:text-gray-700">
               <i class="fa fa-times"></i>
           </button>
       </div>
       <div class="space-y-3 text-gray-600 text-sm">
-          <p>1. 游戏目标：找出所有非地雷的格子，避免踩雷。</p>
-          <p>2. 左键点击：揭开格子，如果是地雷则游戏结束。</p>
-          <p>3. 右键点击：标记疑似地雷的格子。</p>
-          <p>4. 数字提示：格子上的数字表示周围8个格子中地雷的数量。</p>
-          <p>5. 胜利条件：成功揭开所有非地雷格子。</p>
+        <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #2c3e50; text-align: center;">扫雷游戏玩法详解</h2>
+          
+          <p style="font-size: 16px;">
+            <strong>扫雷（Minesweeper）</strong> 是一款经典的单人逻辑益智游戏，最初由微软在Windows系统中内置，深受玩家喜爱。游戏的目标是通过逻辑推理和策略，揭开游戏区域内所有不含地雷的格子，同时避免触发地雷。游戏结合简单操作与深度逻辑推理，适合各年龄段玩家挑战观察力和思维能力。以下是扫雷游戏的详细玩法说明：
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">1. 游戏目标</h3>
+          <p>
+            扫雷的核心目标是<b>找出并揭开所有不含地雷的格子</b>，同时确保不触发任何地雷。玩家需要根据格子上的数字提示，推断地雷位置，并在揭开所有安全格子的同时避免“踩雷”。成功揭开所有非地雷格子即为胜利，而一旦点到地雷，游戏将立即结束。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">2. 基本操作</h3>
+          <p>
+            扫雷的游戏界面通常是一个由多个格子组成的矩形网格，玩家通过鼠标操作与游戏互动。主要操作方式包括：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>左键点击</b>：点击一个未揭开的格子，揭开其内容。如果格子下是地雷，游戏立刻结束，玩家失败。如果不是地雷，则显示一个数字（或空白），提示周围格子中的地雷信息。</li>
+            <li><b>右键点击</b>：在疑似藏有地雷的格子上标记为地雷，通常以旗帜图标表示。标记帮助玩家记录推断出的地雷位置，避免误点。再次右键可取消标记。</li>
+            <li><b>双击或快捷操作</b>（视版本而定）：当玩家确定一个格子周围的地雷已全部标记时，可双击该格子，自动揭开周围未标记的格子，节省时间。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">3. 数字提示与逻辑推理</h3>
+          <p>
+            游戏的策略核心在于<b>格子上的数字提示</b>。揭开格子后，若不是地雷，可能出现以下情况：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>数字</b>：格子上显示的数字（1到8）表示周围8个相邻格子（上下左右及对角线方向）中隐藏的地雷数量。例如，数字“2”表示周围8个格子中有2颗地雷。</li>
+            <li><b>空白格子</b>：若揭开的格子周围没有地雷（数字为0），格子显示为空白，游戏会自动揭开周围格子，直到遇到有数字的格子。这种连锁反应可快速清理大片区域。</li>
+            <li><b>地雷</b>：若揭开的格子是地雷，游戏立即结束，显示所有地雷位置，玩家失败。</li>
+          </ul>
+          <p>
+            玩家需根据数字提示，通过逻辑推理判断哪些格子安全，哪些可能藏有地雷。例如，数字“1”且周围只有一个未揭开格子，则该格子必是地雷，可右键标记。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">4. 游戏难度与设置</h3>
+          <p>
+            扫雷提供多种难度选择，适合不同水平的玩家：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>初级</b>：网格较小（例如9×9），地雷数量少（例如10颗），适合新手熟悉规则。</li>
+            <li><b>中级</b>：网格和地雷数量增加（例如16×16，40颗地雷），需更多逻辑推理。</li>
+            <li><b>高级</b>：网格更大（例如16×30，99颗地雷），挑战性高，考验耐心和技巧。</li>
+            <li><b>自定义</b>：玩家可自行设置网格大小和地雷数量，创造个性化挑战。</li>
+          </ul>
+          <p>
+            游戏开始时，第一次点击通常是安全的（不会触发地雷），以确保公平性。随后，玩家需依靠逻辑逐步揭开格子。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">5. 胜利与失败</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>胜利条件</b>：成功揭开所有不含地雷的格子，游戏结束并宣告胜利。通常显示完成时间和剩余地雷数（标记正确与否不影响胜利）。</li>
+            <li><b>失败条件</b>：左键点击地雷，游戏立即结束，显示所有地雷位置，提示失败原因。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">6. 策略与技巧</h3>
+          <p>
+            扫雷不仅是运气游戏，熟练玩家可通过以下技巧提高胜率：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>从角落开始</b>：从网格角落或边缘点击，通常能更快获得数字提示，推断地雷位置。</li>
+            <li><b>利用已知信息</b>：当格子数字等于周围未揭开格子数时，这些格子必是地雷。例如，数字“3”且周围有3个未揭开格子，全部标记为地雷。</li>
+            <li><b>排除法</b>：当格子数字提示已满足（例如数字“2”且已标记2颗地雷），周围其他未揭开格子安全，可放心点击。</li>
+            <li><b>标记与猜测</b>：逻辑不足时，需根据概率猜测。标记疑似地雷可减少误点风险。</li>
+            <li><b>时间管理</b>：追求高分的玩家需快速决策，熟练掌握快捷操作（如双击）可缩短时间。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">7. 游戏的魅力</h3>
+          <p>
+            扫雷的魅力在于简单却深邃的玩法。规则易上手，但难度增加后，对逻辑推理、空间思维和决策能力要求更高。无论是几分钟的轻松娱乐，还是挑战高难度关卡的脑力激荡，扫雷都能带来满足感。随机性确保每次挑战不同，增加重复游玩乐趣。
+          </p>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">8. 额外功能（视版本而定）</h3>
+          <p>
+            现代版本的扫雷可能包含以下功能：
+          </p>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>计时器</b>：记录完成时间，适合追求速度的玩家。</li>
+            <li><b>排行榜</b>：记录最佳成绩，与其他玩家比较。</li>
+            <li><b>提示功能</b>：某些版本提供有限提示，帮助新手。</li>
+            <li><b>主题与皮肤</b>：更改格子设计或地雷图标，提升视觉体验。</li>
+          </ul>
+        
+          <h3 style="color: #34495e; margin-top: 20px;">9. 小贴士</h3>
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <li><b>保持冷静</b>：复杂局面时，仔细分析数字提示，避免急于点击。</li>
+            <li><b>练习逻辑</b>：多玩几局，熟悉常见模式，如“1-2-1”或“2-2-2”对应的地雷位置。</li>
+            <li><b>享受过程</b>：扫雷既是挑战，也是放松方式，享受推理乐趣！</li>
+          </ul>
+        
+          <p style="font-size: 16px; margin-top: 20px; text-align: center;">
+            扫雷结合逻辑性、策略性和趣味性，无论是新手还是老玩家，都能在这款经典游戏中找到挑战与乐趣！快来试试你的推理能力吧！
+          </p>
+        </div>
       </div>
       <div class="mt-5 text-center">
-          <button onclick="hideHelp()" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
+          <button onclick="hideHelp('minesweeperHelp')" class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
               明白了
           </button>
       </div>
@@ -415,24 +902,6 @@
 </div>
 
 <script>
-// 显示帮助弹窗
-function showHelp() {
-  document.getElementById('helpModal').classList.remove('hidden');
-  document.body.style.overflow = 'hidden'; // 防止背景滚动
-}
-
-// 隐藏帮助弹窗
-function hideHelp() {
-  document.getElementById('helpModal').classList.add('hidden');
-  document.body.style.overflow = ''; // 恢复背景滚动
-}
-
-// 点击弹窗外部关闭弹窗
-document.getElementById('helpModal').addEventListener('click', function(e) {
-  if (e.target === this) {
-      hideHelp();
-  }
-});
 </script>
 
 <style>
@@ -441,9 +910,13 @@ document.getElementById('helpModal').addEventListener('click', function(e) {
   pointer-events: auto;
 }
 
-/* 弹窗动画效果 */
-#helpModal > div {
+/* 弹窗动画效果与滚动支持 */
+[id$="Help"] > div {
   animation: popIn 0.2s ease-out;
+  max-height: 80vh; /* 内容过长时限制高度 */
+  overflow-y: auto; /* 允许在弹窗内部滚动 */
+  -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
+  overscroll-behavior: contain; /* 避免滚动穿透 */
 }
 
 @keyframes popIn {
